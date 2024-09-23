@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,13 +24,11 @@
           </section>
 
           <section class="map-section">
-            <iframe
-              class="weather-map"
-              src="https://yandex.ru/map-widget/v1/-/CJSfiTkt"
-              width=""
-              height=""
-              frameborder="0"
-            ></iframe>
+            <img
+              id="map"
+              src="https://static-maps.yandex.ru/1.x/?ll=37.6173,55.7558&size=600,400&z=10&l=map"
+              alt="Карта"
+            />
             <div class="weather-info-section">
               <p class="weather-description">Информация о погоде</p>
             </div>
@@ -49,6 +47,6 @@
         </div>
       </div>
     </header>
-    <script src="./index.js" type="module"></script>
+    <script src="index.js" type="module"></script>
   </body>
 </html>

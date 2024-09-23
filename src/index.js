@@ -1,2 +1,1 @@
-/* import { sum } from "./sum.js"; */
-import './index.css';
+/* import { sum } from './sum.js'; */
