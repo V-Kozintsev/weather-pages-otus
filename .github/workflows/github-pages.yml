@@ -17,7 +17,7 @@ jobs:
       - name: Build
         run: |
           mkdir dist
-          cp -R srd/* dist
+          cp -R src/* dist
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
