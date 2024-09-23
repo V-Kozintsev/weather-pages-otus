@@ -1,6 +1,6 @@
-import { sum } from "./sum.js";
+import { sum } from './sum.js';
 
-document.querySelector(".app").innerHTML = `<h1>helloOO world</h1><h2>${sum(
+document.querySelector('.app').innerHTML = `<h1>helloOO world</h1><h2>${sum(
   5,
-  2
+  2,
 )}</h2>`;
