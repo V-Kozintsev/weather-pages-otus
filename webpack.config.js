@@ -10,7 +10,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/i,
+        test: /\.css$/, // Регулярное выражение для нахождения файлов .css
         use: ['style-loader', 'css-loader'],
       },
       // другие правила...
