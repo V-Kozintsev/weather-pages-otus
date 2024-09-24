@@ -35,12 +35,6 @@ module.exports = {
       },
     ],
   },
-
-  /* plugins: [
-    new HtmlWebpackPlugin({
-      template: "src/index.html", // Шаблон HTML файла
-    }),
-  ] */
   devServer: {
     static: {
       directory: path.join(__dirname, 'public'),
