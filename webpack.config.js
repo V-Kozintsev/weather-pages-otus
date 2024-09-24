@@ -9,6 +9,13 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true, // Очищает output папку перед новым сборкой
   },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'src/index.html',
+    }),
+  ],
   module: {
     rules: [
       {
@@ -28,13 +35,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'src/index.html',
-    }),
-  ],
+
   /* plugins: [
     new HtmlWebpackPlugin({
       template: "src/index.html", // Шаблон HTML файла
