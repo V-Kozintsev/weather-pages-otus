@@ -1,4 +1,5 @@
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -6,26 +7,47 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    clean: true, // Очищает output папку перед новым сборкой
   },
   module: {
     rules: [
       {
+        test: /\.js$/, // Применяется ко всем .js файлам
+        exclude: /node_modules/, // Исключить папку node_modules
+        use: {
+          loader: 'babel-loader', // Используем babel-loader для обработки JS
+        },
+      },
+      {
         test: /\.css$/, // Регулярное выражение для нахождения файлов .css
         use: ['style-loader', 'css-loader'],
       },
-      // другие правила...
+      {
+        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/, // Для обработки изображений и шрифтов
+        type: 'asset/resource', // Webpack 5 использует asset module
+      },
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
+      filename: 'index.html',
       template: 'src/index.html',
     }),
   ],
+  /* plugins: [
+    new HtmlWebpackPlugin({
+      template: "src/index.html", // Шаблон HTML файла
+    }),
+  ] */
   devServer: {
     static: {
       directory: path.join(__dirname, 'public'),
     },
-    compress: true,
-    port: 9000,
+    compress: true, // Включает сжатие
+    port: 9000, // Порт для dev server
+  },
+  resolve: {
+    extensions: ['.js', '.css'], // Автоматическое добавление расширений
   },
 };

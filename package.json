@@ -8,13 +8,18 @@
     "lint:fix": "npx eslint . --fix",
     "prepare": "husky",
     "build": "webpack --mode=production",
-    "serve": "webpack serve --mode=development"
+    "serve": "webpack serve --mode=development",
+    "start": "webpack --watch"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
     "@eslint/js": "^9.11.0",
+    "babel-loader": "^9.2.1",
+    "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.2",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
@@ -23,6 +28,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "file-loader": "^6.2.0",
     "globals": "^15.9.0",
     "html-webpack-plugin": "^5.6.0",
     "husky": "^9.1.6",
