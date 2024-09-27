@@ -1,45 +1,26 @@
 import './index.css';
 
-const searchHistory = document.querySelector('.weather-description');
-
 const map = document.getElementById('map');
-const apiWeather = '18409888b2bac46281ada6424268e0af';
 
 async function loadMap() {
-  // Проверка поддержки геолокации
-  if (!navigator.geolocation) {
-    console.error('Геолокация не поддерживается вашим браузером.');
-    return;
-  }
-
-  /// / Загрузка карты по текущему местоположению
+  const apiKey = 'ccb284d51487d0a559e0961cfc61e03c';
   try {
     const position = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-    const { latitude, longitude } = position.coords;
+    const { latitude } = position.coords;
+    const { longitude } = position.coords;
+    // Делаем запрос на openWeatherMap
+    const openWeatherMap = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
+
+    // Получаем температуру
     map.src = `https://static-maps.yandex.ru/1.x/?ll=${longitude},${latitude}&size=400,300&z=10&l=map`;
-
-    const weatherResponse = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiWeather}`,
-    );
-
-    if (!weatherResponse.ok) {
-      throw new Error(`Ошибка запроса: ${weatherResponse.status}`);
-    }
-    const weatherData = await weatherResponse.json();
-
-    if (weatherData.main.temp - 273.15 > 0) {
-      searchHistory.textContent = `+${Math.floor(weatherData.main.temp - 273.15)}`;
-    } else {
-      searchHistory.textContent = `-${Math.floor(weatherData.main.temp - 273.15)}`;
-    }
-
-    console.log(`Долгота: ${longitude}, Широта: ${latitude}`);
-    console.log(weatherData);
+    const response = await fetch(openWeatherMap);
+    const data = await response.json();
+    const temp = Math.floor(data.main.temp - 273.15);
+    document.getElementById('temp').textContent = temp;
   } catch (error) {
-    console.error('Ошибка при получении геолокации:', error);
+    console.error('Ошибка запроса');
   }
 }
-
 loadMap();
