@@ -1,5 +1,3 @@
-import './index.css';
-
 const map = document.getElementById('map');
 const apiKey = '0156499c689a265c930535eb44e9e4e0';
 async function loadMap() {
