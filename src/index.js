@@ -27,6 +27,7 @@ async function getLocationData() {
 
     updateMap(latitude, longitude);
     displayWeatherInfo(city, temp);
+    /* webpack test-1 */
   });
 }
 getLocationData();
