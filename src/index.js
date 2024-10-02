@@ -19,7 +19,7 @@ async function getLocationData() {
     const { latitude, longitude } = succes.coords;
 
     const url = await fetch(
-      `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}&aqi=no`,
+      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}&aqi=no`,
     );
     const data = await url.json();
     const city = data.location.name;
@@ -27,7 +27,7 @@ async function getLocationData() {
 
     updateMap(latitude, longitude);
     displayWeatherInfo(city, temp);
-    /* webpack test-3 */
+    /* webpack test-4 */
   });
 }
 getLocationData();
