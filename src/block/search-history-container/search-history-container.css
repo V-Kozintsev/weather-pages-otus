@@ -4,6 +4,7 @@
   border: 2px solid black;
   border-radius: 5px;
   text-align: center;
+  margin-left: 5rem;
 }
 .search-history-title {
   margin: 1rem;
@@ -19,4 +20,15 @@
 
 .search-history-item:last-child {
   margin-bottom: 0; /* Убираем отступ у последнего элемента */
+}
+
+@media (max-width: 1023px) {
+  .search-history-container {
+    max-width: 18rem;
+    margin-left: 1rem;
+  }
+  .search-history-title,
+  .search-history-item {
+    font-size: 14px;
+  }
 }

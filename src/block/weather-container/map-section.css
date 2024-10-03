@@ -1,14 +1,18 @@
 .map-section {
   display: flex;
+  width: 100%;
 }
 
 .map {
-  width: 40rem;
-  height: 30rem;
-  margin-top: 1rem;
-  background-color: aliceblue;
+  width: 400px;
+  height: 300px;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
 }
+
 .weather-info-section {
   border: 2px solid black;
   border-radius: 5px;
@@ -21,4 +25,14 @@
 .weather-description {
   font-size: 1.8rem;
   text-decoration: underline;
+}
+
+@media (max-width: 1023px) {
+  .map,
+  .weather-info-section {
+    width: 100%;
+  }
+  .weather-description {
+    font-size: 1.4rem;
+  }
 }

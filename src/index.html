@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link rel="stylesheet" type="text/css" href="./src/index.css" /> -->
     <title>weather forecast</title>
   </head>
   <body>
@@ -25,17 +24,22 @@
           </section>
 
           <section class="map-section">
-            <iframe
-              class="map"
-              id="map"
-              src=""
-              frameborder="0"
-              title="Карта с текущим местоположением"
-            ></iframe>
+            <div class="div">
+              <iframe
+                class="map"
+                id="map"
+                src=""
+                frameborder="0"
+                title="Карта с текущим местоположением"
+              ></iframe>
+            </div>
 
             <div class="weather-info-section">
               <p class="weather-description" id="city"></p>
               <p class="weather-description" id="temp"></p>
+              <div class="weather-icon">
+                <img id="weather-icon" src="" alt="Иконка погоды" />
+              </div>
             </div>
           </section>
         </div>
