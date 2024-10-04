@@ -6,6 +6,10 @@
   text-align: center;
   margin-left: 5rem;
 }
+.search-history-item:hover {
+  cursor: pointer;
+  color: rgb(0, 183, 255);
+}
 .search-history-title {
   margin: 1rem;
   font-size: 1.8rem;
