@@ -40,5 +40,9 @@ body {
   .header {
     max-width: 100rem;
     padding: 0.5rem;
+    flex-direction: column;
+  }
+  .search-history-container {
+    margin-top: 2rem;
   }
 }

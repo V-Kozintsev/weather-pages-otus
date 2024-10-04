@@ -19,7 +19,7 @@
   font-size: 1.6rem;
 }
 .search-history-item {
-  margin-bottom: 10px; /* Задаем отступ снизу */
+  margin-bottom: 1px; /* Задаем отступ снизу */
 }
 
 .search-history-item:last-child {
