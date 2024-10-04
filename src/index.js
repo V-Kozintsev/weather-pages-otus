@@ -95,6 +95,7 @@ async function getLocationData() {
 
     updateMap(latitude, longitude);
     displayWeatherInfo(city, temp);
+    // webpack-1
   });
 }
 getLocationData();
