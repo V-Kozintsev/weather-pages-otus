@@ -21,7 +21,7 @@ function displayWeatherInfo(city, temp) {
 
 // Функция, принимающая координаты в виде широты и долготы,
 // возвращает информацию о городе и текущей температуре.
-async function geoCoder(city) {
+export async function geoCoder(city) {
   const newItem = document.createElement('li');
   newItem.classList.add('search-history-item');
   const cityDataUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
