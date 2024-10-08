@@ -1,4 +1,5 @@
 import { updateMap, displayWeatherInfo } from './weather-info';
+
 import './index.css';
 
 const apiKey = 'f7f0f48145544647b19130539240210'; // API ключ
@@ -10,7 +11,7 @@ const dataHistory = [];
 
 // Функция, принимающая координаты в виде широты и долготы,
 // возвращает информацию о городе и текущей температуре.
-export async function geoCoder(city) {
+async function geoCoder(city) {
   const newItem = document.createElement('li');
   newItem.classList.add('search-history-item');
   const cityDataUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
@@ -88,6 +89,5 @@ async function getLocationData() {
     updateMap(latitude, longitude);
     displayWeatherInfo(city, temp);
   });
-  // тест
 }
 getLocationData();

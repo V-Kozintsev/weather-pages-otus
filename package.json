@@ -11,7 +11,7 @@
     "start": "webpack --watch",
     "test": "jest --coverage",
     "coveralls": "npm run coverage",
-    "coverage": "cat ./coverage/lcov.info | coveralls"
+    "coverage": "type .\\coverage\\lcov.info | coveralls"
   },
   "author": "",
   "license": "ISC",
