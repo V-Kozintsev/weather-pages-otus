@@ -1,3 +1,4 @@
+import { updateMap, displayWeatherInfo } from './weather-info';
 import './index.css';
 
 const apiKey = 'f7f0f48145544647b19130539240210'; // API ключ
@@ -5,19 +6,7 @@ const inputValue = document.getElementById('form-input');
 const weatherIcon = document.getElementById('weather-icon');
 const btn = document.getElementById('btn');
 const searchHistory = document.getElementById('search-history');
-const map = document.getElementById('map');
 const dataHistory = [];
-
-// Функция для обновления карты
-function updateMap(latitude, longitude) {
-  const mapUrl = `https://static-maps.yandex.ru/1.x/?ll=${longitude},${latitude}&z=10&l=map`;
-  map.src = mapUrl;
-}
-// Функция для отображения в окне информации о погоде
-function displayWeatherInfo(city, temp) {
-  document.getElementById('city').innerText = `Город: ${city}`;
-  document.getElementById('temp').innerText = `Температура: ${temp}°C`;
-}
 
 // Функция, принимающая координаты в виде широты и долготы,
 // возвращает информацию о городе и текущей температуре.
