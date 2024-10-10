@@ -1,0 +1,38 @@
+.search-history-container {
+  width: 20rem;
+  height: 35rem;
+  border: 2px solid black;
+  border-radius: 5px;
+  text-align: center;
+  margin-left: 5rem;
+}
+.search-history-item:hover {
+  cursor: pointer;
+  color: rgb(0, 183, 255);
+}
+.search-history-title {
+  margin: 1rem;
+  font-size: 1.8rem;
+  text-decoration: underline;
+}
+.search-history-item {
+  font-size: 1.6rem;
+}
+.search-history-item {
+  margin-bottom: 1px; /* Задаем отступ снизу */
+}
+
+.search-history-item:last-child {
+  margin-bottom: 0; /* Убираем отступ у последнего элемента */
+}
+
+@media (max-width: 1023px) {
+  .search-history-container {
+    max-width: 18rem;
+    margin-left: 1rem;
+  }
+  .search-history-title,
+  .search-history-item {
+    font-size: 14px;
+  }
+}
