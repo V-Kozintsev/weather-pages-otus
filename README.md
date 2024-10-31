@@ -2,7 +2,7 @@
 
 ## Ссылка на сайт
 
-[Перейти на сайт](v-kozintsev.github.io/weather-pages-otus/)
+[Перейти на сайт](https://v-kozintsev.github.io/weather-pages-otus/)
 
 ### Описание: 
 
