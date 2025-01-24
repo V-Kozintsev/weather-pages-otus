@@ -7,8 +7,7 @@
     "lint:fix": "npx eslint . --fix",
     "prepare": "husky",
     "build": "webpack --mode=production",
-    "serve": "webpack serve --mode=development",
-    "start": "webpack --watch",
+    "start": "webpack serve --mode=development",
     "test": "jest --coverage",
     "coveralls": "npm run coverage",
     "coverage": "type .\\coverage\\lcov.info | coveralls"

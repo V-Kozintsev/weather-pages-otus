@@ -1,54 +1,31 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
-import eslintJest from "eslint-plugin-jest"; // импортируем плагин jest
 
-import { FlatCompat } from "@eslint/eslintrc";
-import path from "path";
-import { fileURLToPath } from "url";
-
-// mimic CommonJS variables -- not needed if using CommonJS
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
+/** @type {import('eslint').Linter.Config[]} */
 export default [
   {
+    files: ["**/*.{js,mjs,cjs,ts}"],
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.jest, // Добавляем глобальные переменные Jest
+        ...globals.jest,
+        module: "readonly", // Allow module globally
+        require: "readonly", // Allow require globally
+        process: "readonly", // Allow process globally
+        __dirname: "readonly", // Allow __dirname globally
       },
     },
   },
+
   pluginJs.configs.recommended,
-  ...compat.extends("eslint-config-airbnb-base"),
+
+  // Overrides for specific files
   {
+    files: ["babel.config.js", "webpack.config.js"],
     rules: {
-      "import/extensions": "off",
-      "import/prefer-default-export": "off",
-    },
-  },
-  {
-    ignores: ["eslint.config.mjs"],
-  },
-  {
-    // Настраиваем плагин jest
-    plugins: {
-      jest: {
-        overrides: [
-          {
-            files: ["**/*.js"], // Указываем, какие файлы следует обрабатывать плагином Jest
-            rules: {
-              "jest/no-disabled-tests": "warn", // Настройка правил плагина Jest
-              "jest/no-focused-tests": "error",
-              "jest/prefer-to-have-length": "warn",
-            },
-          },
-        ],
-      },
+      "no-undef": "off", // Disable the no-undef rule for these files
+
+      "import/no-extraneous-dependencies": "off", // Disable any dependency rules
     },
   },
 ];
