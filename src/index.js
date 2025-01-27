@@ -4,7 +4,7 @@ import * as ymaps3 from "ymaps3";
 navigator.geolocation.getCurrentPosition((position) => {
   const { latitude, longitude } = position.coords;
   updateMapDisplay(longitude, latitude);
-  /* initMap(longitude, latitude); */
+  initMap(longitude, latitude);
 });
 
 async function initMap(longitude, latitude) {
