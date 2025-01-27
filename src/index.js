@@ -1,10 +1,11 @@
 import "./style.css";
 import * as ymaps3 from "ymaps3";
+const apiKey = "f7f0f48145544647b19130539240210";
 
 navigator.geolocation.getCurrentPosition((position) => {
   const { latitude, longitude } = position.coords;
   updateMapDisplay(longitude, latitude);
-  initMap(longitude, latitude);
+  /*  initMap(longitude, latitude); */
 });
 
 async function initMap(longitude, latitude) {
@@ -22,7 +23,7 @@ async function initMap(longitude, latitude) {
 async function updateMap(city) {
   try {
     const weatherApi = await fetch(
-      `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${city}&aqi=no`,
+      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`,
     );
 
     if (!weatherApi.ok) {
@@ -70,7 +71,7 @@ async function updateMap(city) {
 
 async function updateMapDisplay(longitude, latitude) {
   const weatherApi = await fetch(
-    `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${latitude},${longitude}&aqi=no`,
+    `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}&aqi=no`,
   );
   try {
     if (!weatherApi.ok) throw new Error("API не получен");
@@ -126,7 +127,7 @@ document
     const valueCityStr = valueCity.trim();
     try {
       const response = await fetch(
-        `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${valueCityStr}&aqi=no`,
+        `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${valueCityStr}&aqi=no`,
       );
       if (!response.ok) throw new Error("Api по кнопке не получен");
       const dataResponse = await response.json();
