@@ -6,18 +6,21 @@
     <title>Document</title>
   </head>
   <body>
-    <form id="search-form">
-      <input
-        id="inputCity"
-        type="text"
-        required
-        placeholder="Введите название города"
-      />
-      <button id="btn-search">показать</button>
-    </form>
-    <div id="map" class="map"></div>
-    <div class="displayWeatherInfo"></div>
-    <div id="history" class="history"></div>
-    <button id="delHistory">удалить историю</button>
+    <div id="app">
+      <!-- Оборачивающий div -->
+      <form id="search-form">
+        <input
+          id="inputCity"
+          type="text"
+          required
+          placeholder="Введите название города"
+        />
+        <button id="btn-search">показать</button>
+      </form>
+      <div id="map" class="map"></div>
+      <div class="displayWeatherInfo"></div>
+      <div id="history" class="history"></div>
+      <button id="delHistory">удалить историю</button>
+    </div>
   </body>
 </html>
