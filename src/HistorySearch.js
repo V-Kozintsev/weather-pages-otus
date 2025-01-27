@@ -2,6 +2,9 @@ class HistorySearch {
   constructor(key = "weatherHistory") {
     this.key = key;
     this.weatherData = this.loadData();
+    // this.displayHistory(); // Удаляем вызов displayHistory из конструктора
+  }
+  initDisplayHistory() {
     this.displayHistory();
   }
 
@@ -27,24 +30,26 @@ class HistorySearch {
   }
   displayHistory() {
     const historyDiv = document.getElementById("history");
-    historyDiv.innerHTML = "";
-    this.weatherData.forEach((item) => {
-      const historyItem = document.createElement("p");
-      historyItem.textContent = `${item.city}: ${item.temp}°C`;
-      historyItem.addEventListener("click", () => {
-        window.location.hash = `weather/${item.city}`;
+    if (historyDiv) {
+      historyDiv.innerHTML = "";
+      this.weatherData.forEach((item) => {
+        const historyItem = document.createElement("p");
+        historyItem.textContent = `${item.city}: ${item.temp}°C`;
+        historyItem.addEventListener("click", () => {
+          window.location.hash = `weather/${item.city}`;
+        });
+        historyDiv.appendChild(historyItem);
       });
-      historyDiv.appendChild(historyItem);
-    });
+    }
   }
 
   delHistory() {
     const historyDiv = document.getElementById("history");
-    this.weatherData = [];
-    historyDiv.innerHTML = "";
-    localStorage.removeItem(this.key);
+    if (historyDiv) {
+      this.weatherData = [];
+      historyDiv.innerHTML = "";
+      localStorage.removeItem(this.key);
+    }
   }
 }
-const historySearch = new HistorySearch();
-
-export default historySearch;
+export default HistorySearch;

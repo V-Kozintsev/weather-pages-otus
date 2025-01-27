@@ -1,5 +1,5 @@
 import "./style.css";
-import historySearch from "./HistorySearch";
+import HistorySearch from "./HistorySearch";
 import * as ymaps3 from "ymaps3";
 
 const apiKey = "f7f0f48145544647b19130539240210";
@@ -128,7 +128,7 @@ async function fetchWeatherByCity(city) {
       formattedTime,
     });
     initMap(lon, lat);
-    historySearch.addCity(nameCity, temp); // Добавляем вызов addCity
+    historySearchInstance.addCity(nameCity, temp);
   } catch (error) {
     console.error("Ошибка запроса:", error);
     displayWeatherInfo(
@@ -166,10 +166,11 @@ document
     window.location.hash = `weather/${valueCityStr}`;
     document.getElementById("inputCity").value = "";
   });
-
+const historySearchInstance = new HistorySearch();
 window.addEventListener("hashchange", router);
 router();
+historySearchInstance.initDisplayHistory();
 
 document.getElementById("delHistory").addEventListener("click", () => {
-  historySearch.delHistory();
+  historySearchInstance.delHistory();
 });
