@@ -1,55 +1,34 @@
+import HistoryModel from "./HistoryModel.js";
+import displayHistory from "./HistoryView.js";
+
 class HistorySearch {
-  constructor(key = "weatherHistory") {
-    this.key = key;
-    this.weatherData = this.loadData();
-    // this.displayHistory(); // Удаляем вызов displayHistory из конструктора
+  constructor() {
+    this.historyModel = new HistoryModel();
   }
+
   initDisplayHistory() {
-    this.displayHistory();
+    this.updateView();
   }
-
   addCity(city, temp) {
-    if (!this.weatherData.some((item) => item.city === city)) {
-      this.weatherData.push({ city: city, temp: temp });
-      this.saveData();
-      this.displayHistory();
+    const isAdded = this.historyModel.addCity(city, temp);
+    if (isAdded) {
+      this.updateView();
     }
   }
-
-  saveData() {
-    localStorage.setItem(this.key, JSON.stringify(this.weatherData));
-  }
-
-  loadData() {
-    const storedData = localStorage.getItem(this.key);
-    return storedData ? JSON.parse(storedData) : [];
-  }
-
   getHistory() {
-    return this.weatherData;
-  }
-  displayHistory() {
-    const historyDiv = document.getElementById("history");
-    if (historyDiv) {
-      historyDiv.innerHTML = "";
-      this.weatherData.forEach((item) => {
-        const historyItem = document.createElement("p");
-        historyItem.textContent = `${item.city}: ${item.temp}°C`;
-        historyItem.addEventListener("click", () => {
-          window.location.hash = `weather/${item.city}`;
-        });
-        historyDiv.appendChild(historyItem);
-      });
-    }
+    return this.historyModel.getHistory();
   }
 
   delHistory() {
+    this.historyModel.delHistory();
+    this.updateView();
+  }
+  updateView() {
     const historyDiv = document.getElementById("history");
-    if (historyDiv) {
-      this.weatherData = [];
-      historyDiv.innerHTML = "";
-      localStorage.removeItem(this.key);
-    }
+    const weatherData = this.historyModel.getHistory();
+    displayHistory(weatherData, historyDiv, (city) => {
+      window.location.hash = `weather/${city}`;
+    });
   }
 }
 export default HistorySearch;
