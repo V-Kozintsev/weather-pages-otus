@@ -4,7 +4,11 @@ import * as ymaps3 from "ymaps3";
 navigator.geolocation.getCurrentPosition((position) => {
   const { latitude, longitude } = position.coords;
   updateMapDisplay(longitude, latitude);
-  initMap(longitude, latitude);
+  initMap(longitude, latitude),
+    (error) => {
+      console.error("Ошибка геолокации:", error);
+      // Вы можете добавить вывод сообщения пользователю об ошибке
+    };
 });
 
 async function initMap(longitude, latitude) {
