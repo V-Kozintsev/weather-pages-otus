@@ -1,11 +1,10 @@
 import "./style.css";
 import * as ymaps3 from "ymaps3";
-const apiKey = "f7f0f48145544647b19130539240210";
 
 navigator.geolocation.getCurrentPosition((position) => {
   const { latitude, longitude } = position.coords;
   updateMapDisplay(longitude, latitude);
-  /*  initMap(longitude, latitude); */
+  initMap(longitude, latitude);
 });
 
 async function initMap(longitude, latitude) {
@@ -23,12 +22,12 @@ async function initMap(longitude, latitude) {
 async function updateMap(city) {
   try {
     const weatherApi = await fetch(
-      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`,
+      `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${city}&aqi=no`,
     );
 
     if (!weatherApi.ok) {
       const message = `Ошибка HTTP: ${weatherApi.status} ${weatherApi.statusText}`;
-      displayWeatherInfo("Ошибка", message, "", null); // Передаем null для iconUrl в случае ошибки
+      displayWeatherInfo("Ошибка", message, "");
       console.error("Ошибка запроса:", message);
       return;
     }
@@ -36,7 +35,7 @@ async function updateMap(city) {
     const result = await weatherApi.json();
 
     if (!result || !result.location || !result.current) {
-      displayWeatherInfo("Ошибка", "Неверный формат ответа от API", "", null); // Передаем null для iconUrl в случае ошибки
+      displayWeatherInfo("Ошибка", "Неверный формат ответа от API", "");
       console.error("Ошибка запроса: Неверный формат ответа от API", result);
       return;
     }
@@ -44,34 +43,22 @@ async function updateMap(city) {
     const temp = Math.floor(result.current.temp_c);
     const nameCity = result.location.name;
     const { lon, lat } = result.location;
-    const conditionText = result.current.condition.text;
-    const feelsLikeTemp = Math.floor(result.current.feelslike_c);
-    const windKph = result.current.wind_kph;
-    const humidity = result.current.humidity;
-
     const iconUrl = `https:${result.current.condition.icon}`;
 
     initMap(lon, lat);
-    displayWeatherInfo(temp, nameCity, iconUrl, {
-      conditionText,
-      feelsLikeTemp,
-      windKph,
-      humidity,
-    }); // Передаем дополнительные данные
+    displayWeatherInfo(temp, nameCity, iconUrl);
   } catch (error) {
     displayWeatherInfo(
       "Ошибка",
       "Произошла ошибка при обращении к серверу",
       "",
-      null,
     );
     console.error("Ошибка запроса:", error);
   }
 }
-
 async function updateMapDisplay(longitude, latitude) {
   const weatherApi = await fetch(
-    `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}&aqi=no`,
+    `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${latitude},${longitude}&aqi=no`,
   );
   try {
     if (!weatherApi.ok) throw new Error("API не получен");
@@ -79,39 +66,19 @@ async function updateMapDisplay(longitude, latitude) {
     const result = await weatherApi.json();
     const temp = Math.floor(result.current.temp_c);
     const city = result.location.name;
-
-    const feelsLikeTemp = Math.floor(result.current.feelslike_c);
-    const windKph = result.current.wind_kph;
-    const humidity = result.current.humidity;
     const iconUrl = `https:${result.current.condition.icon}`;
-    displayWeatherInfo(temp, city, iconUrl, {
-      feelsLikeTemp,
-      windKph,
-      humidity,
-    }); // Передаем дополнительные данные
+    displayWeatherInfo(temp, city, iconUrl);
   } catch (error) {
     console.error("Ошибка запроса");
   }
 }
 
-function displayWeatherInfo(temp, city, icon, weatherData = null) {
+function displayWeatherInfo(temp, city, icon) {
   const weatherDisplay = document.querySelector(".displayWeatherInfo");
-  let content = `
+  weatherDisplay.innerHTML = `
         <p class="weather-description" id="city">${temp}°C</p>
         <p class="weather-description" id="temp">${city}</p>
-         `;
-  if (icon) {
-    content += `<img id="weather-icon" src="${icon}" alt="Иконка погоды" />`;
-  }
-  if (weatherData) {
-    content += `
-
-        <p class="weather-description">Ощущается как: ${weatherData.feelsLikeTemp}°C</p>
-        <p class="weather-description">Скорость ветра: ${weatherData.windKph} km/h</p>
-        <p class="weather-description">Влажность: ${weatherData.humidity}%</p>
-          `;
-  }
-  weatherDisplay.innerHTML = content;
+        <img id="weather-icon" src="${icon}" alt="Иконка погоды" />`;
 }
 
 document.getElementById("delHistory").addEventListener("click", () => {
@@ -127,25 +94,16 @@ document
     const valueCityStr = valueCity.trim();
     try {
       const response = await fetch(
-        `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${valueCityStr}&aqi=no`,
+        `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${valueCityStr}&aqi=no`,
       );
       if (!response.ok) throw new Error("Api по кнопке не получен");
       const dataResponse = await response.json();
       const temp = Math.floor(dataResponse.current.temp_c);
       const city = dataResponse.location.name;
-
+      console.log(dataResponse);
       const iconUrl = `https:${dataResponse.current.condition.icon}`;
-      const conditionText = dataResponse.current.condition.text;
-      const feelsLikeTemp = Math.floor(dataResponse.current.feelslike_c);
-      const windKph = dataResponse.current.wind_kph;
-      const humidity = dataResponse.current.humidity;
       historySearch.addCity(city, temp);
-      displayWeatherInfo(temp, city, iconUrl, {
-        conditionText,
-        feelsLikeTemp,
-        windKph,
-        humidity,
-      }); // Передаем дополнительные данные
+      displayWeatherInfo(temp, city, iconUrl);
       initMap(dataResponse.location.lon, dataResponse.location.lat);
     } catch (error) {
       console.error(error);
@@ -157,11 +115,7 @@ class HistorySearch {
   constructor(key = "weatherHistory") {
     this.key = key;
     this.weatherData = this.loadData();
-    if (this.weatherData.length > 0) {
-      const lastCity = this.weatherData[this.weatherData.length - 1].city;
-      updateMap(lastCity);
-    }
-    this.displayHistory();
+    this.displayHistory(); // Вызов displayHistory при создании
   }
 
   addCity(city, temp) {
@@ -169,7 +123,7 @@ class HistorySearch {
     if (!this.weatherData.some((item) => item.city === city)) {
       this.weatherData.push({ city: city, temp: temp });
       this.saveData();
-      this.displayHistory();
+      this.displayHistory(); // Вызов displayHistory после добавления города
     }
   }
 
@@ -208,5 +162,4 @@ class HistorySearch {
     localStorage.removeItem(this.key);
   }
 }
-
 const historySearch = new HistorySearch();
