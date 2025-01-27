@@ -1,0 +1,135 @@
+/* Общие стили */
+body {
+  font-family: sans-serif;
+  background-color: #f4f7f6; /* Светло-серый фон */
+  color: #333; /* Темно-серый текст */
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* Занимает всю высоту экрана */
+}
+
+h1 {
+  color: #007bff; /* Синий заголовок */
+  margin-bottom: 20px;
+}
+
+/* Форма ввода */
+input {
+  padding: 12px;
+  border: 1px solid #ddd; /* Светло-серая рамка */
+  border-radius: 4px;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #007bff; /* Синяя рамка при фокусе */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); /* Синяя тень */
+}
+
+button {
+  padding: 12px 20px;
+  background-color: #007bff; /* Синий фон кнопки */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease; /* Плавный переход цвета */
+  margin-bottom: 20px;
+}
+
+button:hover {
+  background-color: #0056b3; /* Более темный синий при наведении */
+}
+
+button:disabled {
+  background-color: #ccc; /* серый фон если кнопка не активна */
+  cursor: not-allowed;
+}
+/* Карта */
+#map {
+  width: 80%; /* Ширина карты */
+  height: 300px; /* Высота карты */
+  border: 1px solid #ddd;
+  border-radius: 8px; /* Закругленные углы */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Небольшая тень */
+  margin-bottom: 20px;
+}
+
+/* Информация о погоде */
+.displayWeatherInfo {
+  width: 80%;
+  padding: 20px;
+  background-color: white; /* Белый фон */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.weather-description {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+#weather-icon {
+  width: 100px;
+  height: 100px;
+}
+.week-forecast {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.forecast-item {
+  text-align: center;
+}
+
+.forecast-item img {
+  width: 50px;
+  height: 50px;
+  margin: 10px 0;
+}
+/* История поиска */
+#history {
+  width: 80%;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+#history p {
+  padding: 10px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+}
+
+#history p:hover {
+  background-color: #f0f0f0;
+}
+#delHistory {
+  padding: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+#delHistory:hover {
+  background-color: #c82333;
+}

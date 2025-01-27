@@ -17,6 +17,13 @@ module.exports = {
       template: "src/index.html",
     }),
   ],
+  externalsType: "script",
+  externals: {
+    ymaps3: [
+      "https://api-maps.yandex.ru/v3/?apikey=b053285a-f157-45bf-9726-cec55b7deb89&lang=ru_RU",
+      "ymaps3",
+    ],
+  },
   module: {
     rules: [
       {
