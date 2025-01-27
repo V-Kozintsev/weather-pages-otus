@@ -7,7 +7,6 @@ navigator.geolocation.getCurrentPosition((position) => {
   initMap(longitude, latitude),
     (error) => {
       console.error("Ошибка геолокации:", error);
-      // Вы можете добавить вывод сообщения пользователю об ошибке
     };
 });
 
@@ -23,15 +22,24 @@ async function initMap(longitude, latitude) {
   map.addChild(new YMapDefaultSchemeLayer());
 }
 
+function formatDateTime(date) {
+  const day = date.toLocaleDateString("ru-RU", { weekday: "short" });
+  const time = date.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `${day}, ${time}`;
+}
 async function updateMap(city) {
+  const apiKey = "f7f0f48145544647b19130539240210";
   try {
     const weatherApi = await fetch(
-      `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${city}&aqi=no`,
+      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`,
     );
 
     if (!weatherApi.ok) {
       const message = `Ошибка HTTP: ${weatherApi.status} ${weatherApi.statusText}`;
-      displayWeatherInfo("Ошибка", message, "");
+      displayWeatherInfo("Ошибка", message, "", null);
       console.error("Ошибка запроса:", message);
       return;
     }
@@ -39,30 +47,39 @@ async function updateMap(city) {
     const result = await weatherApi.json();
 
     if (!result || !result.location || !result.current) {
-      displayWeatherInfo("Ошибка", "Неверный формат ответа от API", "");
+      displayWeatherInfo("Ошибка", "Неверный формат ответа от API", "", null);
       console.error("Ошибка запроса: Неверный формат ответа от API", result);
       return;
     }
-
     const temp = Math.floor(result.current.temp_c);
     const nameCity = result.location.name;
     const { lon, lat } = result.location;
     const iconUrl = `https:${result.current.condition.icon}`;
+    const windKph = result.current.wind_kph;
+    const humidity = result.current.humidity;
+    const localTime = new Date(result.location.localtime);
+    const formattedTime = formatDateTime(localTime);
 
     initMap(lon, lat);
-    displayWeatherInfo(temp, nameCity, iconUrl);
+    displayWeatherInfo(temp, nameCity, iconUrl, {
+      windKph,
+      humidity,
+      formattedTime,
+    });
   } catch (error) {
     displayWeatherInfo(
       "Ошибка",
       "Произошла ошибка при обращении к серверу",
       "",
+      null,
     );
     console.error("Ошибка запроса:", error);
   }
 }
 async function updateMapDisplay(longitude, latitude) {
+  const apiKey = "f7f0f48145544647b19130539240210";
   const weatherApi = await fetch(
-    `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${latitude},${longitude}&aqi=no`,
+    `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}&aqi=no`,
   );
   try {
     if (!weatherApi.ok) throw new Error("API не получен");
@@ -71,18 +88,37 @@ async function updateMapDisplay(longitude, latitude) {
     const temp = Math.floor(result.current.temp_c);
     const city = result.location.name;
     const iconUrl = `https:${result.current.condition.icon}`;
-    displayWeatherInfo(temp, city, iconUrl);
+    const windKph = result.current.wind_kph;
+    const humidity = result.current.humidity;
+    const localTime = new Date(result.location.localtime);
+    const formattedTime = formatDateTime(localTime);
+    displayWeatherInfo(temp, city, iconUrl, {
+      windKph,
+      humidity,
+      formattedTime,
+    });
   } catch (error) {
     console.error("Ошибка запроса");
   }
 }
 
-function displayWeatherInfo(temp, city, icon) {
+function displayWeatherInfo(temp, city, icon, weatherData = null) {
   const weatherDisplay = document.querySelector(".displayWeatherInfo");
-  weatherDisplay.innerHTML = `
-        <p class="weather-description" id="city">${temp}°C</p>
-        <p class="weather-description" id="temp">${city}</p>
-        <img id="weather-icon" src="${icon}" alt="Иконка погоды" />`;
+  let content = `
+      <p class="weather-description" id="city">${temp}°C</p>
+      <p class="weather-description" id="temp">${city}</p>
+       `;
+  if (icon) {
+    content += `<img id="weather-icon" src="${icon}" alt="Иконка погоды" />`;
+  }
+  if (weatherData) {
+    content += `
+       <p class="weather-description">Дата и время: ${weatherData.formattedTime}</p>
+        <p class="weather-description">Скорость ветра: ${weatherData.windKph} km/h</p>
+      <p class="weather-description">Влажность: ${weatherData.humidity}%</p>
+        `;
+  }
+  weatherDisplay.innerHTML = content;
 }
 
 document.getElementById("delHistory").addEventListener("click", () => {
@@ -93,12 +129,13 @@ document
   .getElementById("search-form")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
+    const apiKey = "f7f0f48145544647b19130539240210";
     document.getElementById("map").innerHTML = "";
     const valueCity = document.getElementById("inputCity").value;
     const valueCityStr = valueCity.trim();
     try {
       const response = await fetch(
-        `https://api.weatherapi.com/v1/current.json?key=f7f0f48145544647b19130539240210&q=${valueCityStr}&aqi=no`,
+        `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${valueCityStr}&aqi=no`,
       );
       if (!response.ok) throw new Error("Api по кнопке не получен");
       const dataResponse = await response.json();
@@ -106,8 +143,16 @@ document
       const city = dataResponse.location.name;
       console.log(dataResponse);
       const iconUrl = `https:${dataResponse.current.condition.icon}`;
+      const windKph = dataResponse.current.wind_kph;
+      const humidity = dataResponse.current.humidity;
+      const localTime = new Date(dataResponse.location.localtime);
+      const formattedTime = formatDateTime(localTime);
       historySearch.addCity(city, temp);
-      displayWeatherInfo(temp, city, iconUrl);
+      displayWeatherInfo(temp, city, iconUrl, {
+        windKph,
+        humidity,
+        formattedTime,
+      });
       initMap(dataResponse.location.lon, dataResponse.location.lat);
     } catch (error) {
       console.error(error);

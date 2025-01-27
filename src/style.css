@@ -1,25 +1,25 @@
 /* Общие стили */
 body {
   font-family: sans-serif;
-  background-color: #f4f7f6; /* Светло-серый фон */
-  color: #333; /* Темно-серый текст */
+  background-color: #f4f7f6;
+  color: #333;
   margin: 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh; /* Занимает всю высоту экрана */
+  min-height: 95vh;
 }
 
 h1 {
-  color: #007bff; /* Синий заголовок */
+  color: #007bff;
   margin-bottom: 20px;
 }
 
 /* Форма ввода */
 input {
   padding: 12px;
-  border: 1px solid #ddd; /* Светло-серая рамка */
+  border: 1px solid #ddd;
   border-radius: 4px;
   margin-right: 10px;
   font-size: 16px;
@@ -27,37 +27,38 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #007bff; /* Синяя рамка при фокусе */
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); /* Синяя тень */
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
 button {
   padding: 12px 20px;
-  background-color: #007bff; /* Синий фон кнопки */
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease; /* Плавный переход цвета */
+  transition: background-color 0.3s ease;
   margin-bottom: 20px;
 }
 
 button:hover {
-  background-color: #0056b3; /* Более темный синий при наведении */
+  background-color: #0056b3;
 }
 
 button:disabled {
-  background-color: #ccc; /* серый фон если кнопка не активна */
+  background-color: #ccc;
   cursor: not-allowed;
 }
+
 /* Карта */
 #map {
-  width: 80%; /* Ширина карты */
-  height: 300px; /* Высота карты */
+  width: 80%;
+  height: 300px;
   border: 1px solid #ddd;
-  border-radius: 8px; /* Закругленные углы */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Небольшая тень */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
@@ -65,7 +66,7 @@ button:disabled {
 .displayWeatherInfo {
   width: 80%;
   padding: 20px;
-  background-color: white; /* Белый фон */
+  background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -75,11 +76,11 @@ button:disabled {
 
 .weather-description {
   font-size: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 #weather-icon {
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
 }
 .week-forecast {
   display: flex;
@@ -96,6 +97,7 @@ button:disabled {
   height: 50px;
   margin: 10px 0;
 }
+
 /* История поиска */
 #history {
   width: 80%;
@@ -105,6 +107,8 @@ button:disabled {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 10px;
   margin-bottom: 20px;
+  max-height: 300px; /* Максимальная высота блока */
+  overflow-y: auto; /* Включает вертикальный скролл */
 }
 
 #history p {
@@ -119,6 +123,7 @@ button:disabled {
 #history p:hover {
   background-color: #f0f0f0;
 }
+
 #delHistory {
   padding: 10px;
   background-color: #dc3545;
@@ -130,6 +135,7 @@ button:disabled {
   transition: background-color 0.3s ease;
   margin-bottom: 20px;
 }
+
 #delHistory:hover {
   background-color: #c82333;
 }
