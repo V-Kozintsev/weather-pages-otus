@@ -1,93 +1,176 @@
-import { updateMap, displayWeatherInfo } from './weather-info';
+import "./style.css";
+import HistorySearch from "./HistorySearch";
+import * as ymaps3 from "ymaps3";
 
-import './index.css';
+const apiKey = "f7f0f48145544647b19130539240210";
 
-const apiKey = 'f7f0f48145544647b19130539240210'; // API ключ
-const inputValue = document.getElementById('form-input');
-const weatherIcon = document.getElementById('weather-icon');
-const btn = document.getElementById('btn');
-const searchHistory = document.getElementById('search-history');
-const dataHistory = [];
+function formatDateTime(date) {
+  const day = date.toLocaleDateString("ru-RU", { weekday: "short" });
+  const time = date.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `${day}, ${time}`;
+}
 
-// Функция, принимающая координаты в виде широты и долготы,
-// возвращает информацию о городе и текущей температуре.
-async function geoCoder(city) {
-  const newItem = document.createElement('li');
-  newItem.classList.add('search-history-item');
-  const cityDataUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
-  try {
-    const response = await fetch(cityDataUrl);
-    if (!response.ok) throw new Error('Ошибка сети');
+function displayWeatherInfo(temp, city, icon, weatherData = null) {
+  const weatherDisplay = document.querySelector(".displayWeatherInfo");
+  let content = `
+      <p class="weather-description" id="city">${temp}°C</p>
+      <p class="weather-description" id="temp">${city}</p>
+       `;
+  if (icon) {
+    content += `<img id="weather-icon" src="${icon}" alt="Иконка погоды" />`;
+  }
+  if (weatherData) {
+    content += `
+       <p class="weather-description">Дата и время: ${weatherData.formattedTime}</p>
+        <p class="weather-description">Скорость ветра: ${weatherData.windKph} km/h</p>
+      <p class="weather-description">Влажность: ${weatherData.humidity}%</p>
+        `;
+  }
+  weatherDisplay.innerHTML = content;
+}
 
-    const data = await response.json();
-    const cityName = data.location.name;
-    const temp = Math.floor(data.current.temp_c);
-    const longitude = data.location.lon;
-    const latitude = data.location.lat;
+async function initMap(longitude, latitude) {
+  await ymaps3.ready;
+  const { YMap, YMapDefaultSchemeLayer } = ymaps3;
+  const mapElement = document.getElementById("map");
 
-    const iconUrl = `https:${data.current.condition.icon}`;
-    weatherIcon.src = iconUrl;
-
-    const saveData = {
-      city: cityName,
-      temp,
-    };
-    localStorage.setItem('city', JSON.stringify(saveData));
-    const cityLocal = localStorage.getItem('city');
-    const newLocal = JSON.parse(cityLocal);
-
-    const duplicateCity = dataHistory.some(
-      (item) => item.city === saveData.city,
-    );
-
-    if (duplicateCity === false) {
-      dataHistory.push(newLocal);
-      newItem.textContent = saveData.city;
-      searchHistory.appendChild(newItem);
-    }
-
-    if (searchHistory.childNodes.length > 10) {
-      searchHistory.removeChild(searchHistory.childNodes[0]);
-      dataHistory.shift();
-    }
-
-    updateMap(latitude, longitude);
-    displayWeatherInfo(cityName, temp);
-
-    newItem.addEventListener('click', (event) => {
-      event.preventDefault();
-      displayWeatherInfo(newLocal.city, newLocal.temp);
-      weatherIcon.src = iconUrl;
-      updateMap(latitude, longitude);
+  if (mapElement.map) {
+    mapElement.map.update({
+      location: {
+        center: [longitude, latitude],
+        zoom: 10,
+      },
     });
-  } catch (error) {
-    console.error('Ошибка запроса', error);
+  } else {
+    const map = new YMap(mapElement, {
+      location: {
+        center: [longitude, latitude],
+        zoom: 10,
+      },
+    });
+    map.addChild(new YMapDefaultSchemeLayer());
+    mapElement.map = map;
   }
 }
 
-// Кнопка, при нажатии на которую,
-// отображает название города и текущую температуру, введенные в поле ввода (input).
-btn.addEventListener('click', (event) => {
-  event.preventDefault();
-  geoCoder(inputValue.value.trim());
-  inputValue.value = '';
-});
-
-// Функция отображает текущую геолокацию,погоду и карту
-async function getLocationData() {
-  navigator.geolocation.getCurrentPosition(async (succes) => {
-    const { latitude, longitude } = succes.coords;
-    const url = await fetch(
+async function fetchWeatherByCoords(latitude, longitude) {
+  try {
+    const weatherApi = await fetch(
       `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}&aqi=no`,
     );
-    const data = await url.json();
-    const city = data.location.name;
-    const temp = Math.floor(data.current.temp_c);
-    const iconUrl = `https:${data.current.condition.icon}`;
-    weatherIcon.src = iconUrl;
+    if (!weatherApi.ok) throw new Error("API не получен");
 
-    updateMap(latitude, longitude);
-    displayWeatherInfo(city, temp);
-  });
+    const result = await weatherApi.json();
+    const temp = Math.floor(result.current.temp_c);
+    const city = result.location.name;
+    const iconUrl = `https:${result.current.condition.icon}`;
+    const windKph = result.current.wind_kph;
+    const humidity = result.current.humidity;
+    const localTime = new Date(result.location.localtime);
+    const formattedTime = formatDateTime(localTime);
+
+    displayWeatherInfo(temp, city, iconUrl, {
+      windKph,
+      humidity,
+      formattedTime,
+    });
+    initMap(longitude, latitude);
+  } catch (error) {
+    console.error("Ошибка запроса:", error);
+    displayWeatherInfo(
+      "Ошибка",
+      "Произошла ошибка при обращении к серверу",
+      "",
+      null,
+    );
+  }
 }
-getLocationData();
+
+async function fetchWeatherByCity(city) {
+  try {
+    const weatherApi = await fetch(
+      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`,
+    );
+    if (!weatherApi.ok) {
+      displayWeatherInfo(
+        "Ошибка",
+        `Ошибка HTTP: ${weatherApi.status} ${weatherApi.statusText}`,
+        "",
+        null,
+      );
+      console.error(
+        "Ошибка запроса:",
+        `Ошибка HTTP: ${weatherApi.status} ${weatherApi.statusText}`,
+      );
+      return;
+    }
+
+    const result = await weatherApi.json();
+    if (!result || !result.location || !result.current) {
+      displayWeatherInfo("Ошибка", "Неверный формат ответа от API", "", null);
+      console.error("Ошибка запроса: Неверный формат ответа от API", result);
+      return;
+    }
+    const temp = Math.floor(result.current.temp_c);
+    const nameCity = result.location.name;
+    const { lon, lat } = result.location;
+    const iconUrl = `https:${result.current.condition.icon}`;
+    const windKph = result.current.wind_kph;
+    const humidity = result.current.humidity;
+    const localTime = new Date(result.location.localtime);
+    const formattedTime = formatDateTime(localTime);
+    displayWeatherInfo(temp, nameCity, iconUrl, {
+      windKph,
+      humidity,
+      formattedTime,
+    });
+    initMap(lon, lat);
+    historySearchInstance.addCity(nameCity, temp);
+  } catch (error) {
+    console.error("Ошибка запроса:", error);
+    displayWeatherInfo(
+      "Ошибка",
+      "Произошла ошибка при обращении к серверу",
+      "",
+      null,
+    );
+  }
+}
+
+function router() {
+  const hash = window.location.hash.slice(1);
+  if (hash.startsWith("weather/")) {
+    const city = hash.slice(8);
+    fetchWeatherByCity(city);
+  } else {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      fetchWeatherByCoords(latitude, longitude);
+      initMap(longitude, latitude),
+        (error) => {
+          console.error("Ошибка геолокации:", error);
+        };
+    });
+  }
+}
+
+document
+  .getElementById("search-form")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+    const valueCity = document.getElementById("inputCity").value;
+    const valueCityStr = valueCity.trim();
+    window.location.hash = `weather/${valueCityStr}`;
+    document.getElementById("inputCity").value = "";
+  });
+const historySearchInstance = new HistorySearch();
+window.addEventListener("hashchange", router);
+router();
+historySearchInstance.initDisplayHistory();
+
+document.getElementById("delHistory").addEventListener("click", () => {
+  historySearchInstance.delHistory();
+});
