@@ -26,7 +26,8 @@ const weatherSlice = createSlice({
     addCityToHistory: (state, action) => {
       const { city, temp } = action.payload;
       if (!state.history.some((item) => item.city === city)) {
-        state.history.push({ city: city, temp: temp });
+        state.history.push({ city, temp });
+        localStorage.setItem("weatherHistory", JSON.stringify(state.history));
       }
     },
     deleteHistory: (state) => {
