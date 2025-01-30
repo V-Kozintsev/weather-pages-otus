@@ -1,3 +1,4 @@
+//index.js
 import "./style.css";
 import { loadHistoryFromStorage, deleteHistory } from "./store/weatherSlice";
 import { router } from "./router";
