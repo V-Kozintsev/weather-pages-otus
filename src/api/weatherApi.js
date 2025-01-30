@@ -1,3 +1,4 @@
+//weatherApi.js
 import {
   fetchWeatherStart,
   fetchWeatherSuccess,
