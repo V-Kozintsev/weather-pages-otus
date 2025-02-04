@@ -1,7 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-  // Код для инициализации карты и загрузки истории поиска
-  getCurrentLocationWeather(false); // или другой код инициализации
-});
 import "./style.css";
 import * as ymaps3 from "ymaps3";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
@@ -113,11 +109,19 @@ const weatherSlice = createSlice({
       applyTheme(action.payload);
     },
     setUnits: (state, action) => {
-      state.units = action.payload;
-      localStorage.setItem("units", action.payload);
-    },
-    updateHistory: (state, action) => {
-      state.history = action.payload;
+      const newUnits = action.payload;
+      state.units = newUnits;
+      localStorage.setItem("units", newUnits);
+
+      state.history = state.history.map((item) => {
+        let temp = item.temp;
+        if (newUnits === "fahrenheit" && item.units === "celsius") {
+          temp = Math.floor((item.temp * 9) / 5 + 32);
+        } else if (newUnits === "celsius" && item.units === "fahrenheit") {
+          temp = Math.floor(((item.temp - 32) * 5) / 9);
+        }
+        return { ...item, temp: temp, units: newUnits };
+      });
     },
   },
 });
@@ -135,7 +139,6 @@ const {
   loadHistoryFromStorage,
   setTheme,
   setUnits,
-  updateHistory,
 } = weatherSlice.actions;
 
 // --- API Fetching Functions ---
@@ -334,17 +337,6 @@ function displayHistory(historyData) {
   historyData.forEach((item) => {
     let temp = item.temp;
     let units = item.units === "fahrenheit" ? "°F" : "°C";
-    if (store.getState().units !== item.units) {
-      // Конвертируем температуру, если текущие единицы измерения отличаются от сохраненных
-      if (store.getState().units === "fahrenheit") {
-        temp = Math.floor((item.temp * 9) / 5 + 32);
-        units = "°F";
-      } else {
-        temp = Math.floor(((item.temp - 32) * 5) / 9);
-        units = "°C";
-      }
-    }
-
     const historyItem = document.createElement("p");
     historyItem.textContent = `${item.city}: ${temp}${units}`;
     historyItem.addEventListener("click", () => {
@@ -404,32 +396,7 @@ store.subscribe(() => {
   displayWeatherInfo();
   displayHistory(state.history);
   applyTheme(state.theme);
-});
-
-// --- Сохранение history в localStorage при изменении ---
-// Убрал логику обновления истории здесь, так как она может вызывать рекурсию
-store.subscribe(() => {
-  const state = store.getState();
-
-  // Update history temps
-  if (state.units !== localStorage.getItem("units")) {
-    const updatedHistory = state.history.map((item) => {
-      let temp = item.temp;
-      let newUnits = state.units;
-      if (state.units === "fahrenheit" && item.units === "celsius") {
-        temp = Math.floor((item.temp * 9) / 5 + 32);
-      } else if (state.units === "celsius" && item.units === "fahrenheit") {
-        temp = Math.floor(((item.temp - 32) * 5) / 9);
-      }
-      return { ...item, temp: temp, units: newUnits }; //save new units
-    });
-    // Вызов updateHistory здесь!
-    store.dispatch(updateHistory(updatedHistory));
-  }
-
-  // Save history to local storage
-  localStorage.setItem("units", state.units);
-  localStorage.setItem("weatherHistory", JSON.stringify(state.history));
+  localStorage.setItem("weatherHistory", JSON.stringify(state.history)); // Save History
 });
 
 // --- Initial Theme Application ---
