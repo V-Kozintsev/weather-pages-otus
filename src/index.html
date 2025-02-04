@@ -1,56 +1,53 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>weather forecast</title>
+    <title>Weather App</title>
   </head>
   <body>
-    <header class="header">
-      <div class="weather-container">
-        <div class="forecast-box">
-          <section class="weather-form-section">
-            <form class="city-search-form" action="">
-              <div class="city-input-group">
-                <input
-                  id="form-input"
-                  class="city-input"
-                  type="text"
-                  placeholder="Введите название города"
-                />
-                <button id="btn" class="submit-button">Показать</button>
-              </div>
-            </form>
-          </section>
-
-          <section class="map-section">
-            <div class="div">
-              <iframe
-                class="map"
-                id="map"
-                src=""
-                frameborder="0"
-                title="Карта с текущим местоположением"
-              ></iframe>
-            </div>
-
-            <div class="weather-info-section">
-              <p class="weather-description" id="city"></p>
-              <p class="weather-description" id="temp"></p>
-              <div class="weather-icon">
-                <img id="weather-icon" src="" alt="Иконка погоды" />
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-
-      <div class="search-history-container">
-        <h2 class="search-history-title">История поиска</h2>
-        <div class="search-history-results">
-          <ul class="search-history" id="search-history"></ul>
-        </div>
-      </div>
-    </header>
+    <div id="app">
+      <!-- Оборачивающий div -->
+      <button id="settings-button">Настройки</button>
+      <button id="about-button">О приложении</button>
+      <!-- НОВАЯ КНОПКА -->
+      <form id="search-form">
+        <input
+          id="inputCity"
+          type="text"
+          required
+          placeholder="Введите название города"
+        />
+        <button id="btn-search">показать</button>
+      </form>
+      <div id="map" class="map"></div>
+      <div class="displayWeatherInfo"></div>
+      <div id="history" class="history"></div>
+      <button id="delHistory">удалить историю</button>
+    </div>
+    <div id="settings-page" style="display: none"></div>
+    <div id="about-page" style="display: none">
+      <h2>О приложении</h2>
+      <p>
+        Это простое приложение для отображения текущей погоды в любом городе
+        мира и определения местоположения на карте.
+      </p>
+      <p>Версия: <span id="app-version"></span></p>
+      <p>Используемые технологии:</p>
+      <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>Redux Toolkit</li>
+        <li>WeatherAPI (для получения данных о погоде)</li>
+        <li>Yandex Maps API (для отображения карты)</li>
+      </ul>
+      <p>Разработчик: Ваше Имя</p>
+      <p>Контакт: your.email@example.com</p>
+      <p>
+        Репозиторий на
+        <a href="https://github.com/V-Kozintsev" target="_blank">GitHub</a>
+      </p>
+    </div>
   </body>
 </html>
