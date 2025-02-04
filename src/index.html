@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Weather App</title>
   </head>
   <body>
     <div id="app">
       <!-- Оборачивающий div -->
+      <button id="settings-button">Настройки</button>
+      <button id="about-button">О приложении</button>
+      <!-- НОВАЯ КНОПКА -->
       <form id="search-form">
         <input
           id="inputCity"
@@ -21,6 +24,30 @@
       <div class="displayWeatherInfo"></div>
       <div id="history" class="history"></div>
       <button id="delHistory">удалить историю</button>
+    </div>
+    <div id="settings-page" style="display: none"></div>
+    <div id="about-page" style="display: none">
+      <h2>О приложении</h2>
+      <p>
+        Это простое приложение для отображения текущей погоды в любом городе
+        мира и определения местоположения на карте.
+      </p>
+      <p>Версия: <span id="app-version"></span></p>
+      <p>Используемые технологии:</p>
+      <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>Redux Toolkit</li>
+        <li>WeatherAPI (для получения данных о погоде)</li>
+        <li>Yandex Maps API (для отображения карты)</li>
+      </ul>
+      <p>Разработчик: Ваше Имя</p>
+      <p>Контакт: your.email@example.com</p>
+      <p>
+        Репозиторий на
+        <a href="https://github.com/V-Kozintsev" target="_blank">GitHub</a>
+      </p>
     </div>
   </body>
 </html>
